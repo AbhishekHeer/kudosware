@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kudosware/Auth/login..dart';
 import 'package:kudosware/Routes/gen_routes.dart';
+import 'package:kudosware/bloc/auth_bloc.dart';
 import 'package:kudosware/bloc/navigate_bloc.dart';
 import 'package:kudosware/firebase_options.dart';
+import 'package:kudosware/home/db.dart';
 import 'package:kudosware/home/home.dart';
 
 void main() async {
@@ -22,8 +24,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NavigateBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => NavigateBloc()),
+        BlocProvider(create: (context) => AuthBloc()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Kudosware',

@@ -32,13 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      // body: StreamBuilder(
-      //     stream: "stream",
-      //     builder: (context, snapshot) {
-      //       return const Column(
-      //         children: <Widget>[],
-      //       );
-      //     }),
       floatingActionButton: Padding(
         padding: EdgeInsets.only(bottom: height * .05),
         child: FloatingActionButton(
