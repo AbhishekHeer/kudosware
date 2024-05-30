@@ -7,7 +7,6 @@ import 'package:kudosware/Routes/gen_routes.dart';
 import 'package:kudosware/bloc/auth_bloc.dart';
 import 'package:kudosware/bloc/navigate_bloc.dart';
 import 'package:kudosware/firebase_options.dart';
-import 'package:kudosware/home/db.dart';
 import 'package:kudosware/home/home.dart';
 
 void main() async {

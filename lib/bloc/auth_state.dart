@@ -5,9 +5,8 @@ sealed class AuthState {}
 final class AuthInitial extends AuthState {}
 
 final class Authsuccess extends AuthState {
-  final String message;
-
-  Authsuccess({required this.message});
+  final UserModel model;
+  Authsuccess({required this.model});
 }
 
 final class Authfailure extends AuthState {
