@@ -37,8 +37,32 @@ class _LoginBodyState extends State<LoginBody> {
         if (state is Loginfailure) {
           Messege.showMessege(context, "Invalid Credentials");
         }
+
+        if (state is Proccess) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        }
       },
       builder: (context, state) {
+        if (state is Proccess) {
+          if (state.logged != true) {
+            showAdaptiveDialog(
+                context: context,
+                builder: (context) {
+                  return const Dialog.fullscreen(
+                      child: Center(
+                    child: CircularProgressIndicator(),
+                  ));
+                });
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }
+        }
         return SingleChildScrollView(
           child: Center(
             child: Column(
@@ -61,6 +85,7 @@ class _LoginBodyState extends State<LoginBody> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: width * .05),
                   child: TextField(
+                    keyboardType: TextInputType.emailAddress,
                     controller: email,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(

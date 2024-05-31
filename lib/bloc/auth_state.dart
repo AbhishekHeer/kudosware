@@ -15,6 +15,8 @@ final class Authfailure extends AuthState {
   Authfailure({required this.message});
 }
 
+final class AuthLoading extends AuthState {}
+
 final class Loginrequest extends AuthState {}
 
 final class Loginfailure extends AuthState {
@@ -68,6 +70,9 @@ final class Getdataerror extends AuthState {
   Getdataerror({required this.error});
 }
 
-final class Proccess extends AuthState {}
+final class Proccess extends AuthState {
+  final bool logged;
+  Proccess({required this.logged});
+}
 
 final class Dataload extends AuthState {}

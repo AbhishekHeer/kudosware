@@ -38,7 +38,10 @@ class _AddDetailsState extends State<AddDetails> {
         );
       }
       return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Add Details'),
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[

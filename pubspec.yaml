@@ -42,7 +42,6 @@ dependencies:
   animated_button_bar: ^1.0.0
   flutter_bloc: ^8.1.5
   google_fonts: ^6.2.1
-  firebase_dynamic_links: ^5.5.6
   lottie: ^3.1.2
   cloud_firestore: ^4.17.5
 

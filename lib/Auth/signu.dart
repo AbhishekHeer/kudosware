@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kudosware/Auth/verifyemial.dart';
 import 'package:kudosware/bloc/auth_bloc.dart';
-import 'package:kudosware/home/home.dart';
 import 'package:kudosware/messege.dart';
 
 class Sign extends StatefulWidget {
@@ -29,6 +29,12 @@ class _SignState extends State<Sign> {
     return SingleChildScrollView(
         child: BlocConsumer<AuthBloc, AuthState>(
       builder: (context, state) {
+        if (state is AuthLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
         return Column(children: [
           Column(
             children: <Widget>[
@@ -99,9 +105,9 @@ class _SignState extends State<Sign> {
       },
       listener: (BuildContext context, AuthState state) {
         if (state is Authsuccess) {
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(builder: (context) => const Verifyemail()),
           );
 
           email.text = "";

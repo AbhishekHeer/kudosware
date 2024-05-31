@@ -20,6 +20,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
 
+      if (event.password.length < 6) {
+        emit(Loginfailure(
+            message: "Password must be atleast 6 characters long"));
+        return;
+      }
+
+      emit(AuthLoading());
       try {
         final auth = FirebaseAuth.instance;
         final store = FirebaseFirestore.instance;
@@ -33,7 +40,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await store.collection("user").doc(id).set(user.toJson());
         emit(Authsuccess(model: user));
       } on FirebaseAuthException catch (e) {
-        emit(Authfailure(message: e.toString()));
+        emit(Authfailure(message: "Email already used by another account"));
         throw Exception(e);
       }
     });
@@ -42,6 +49,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginReq>((event, emit) async {
       if (event.email.isEmpty || event.password.isEmpty) {
         emit(Loginfailure(message: "Please fill all the fields"));
+
+        return;
       }
 
       if (!event.email.contains('@')) {
@@ -49,16 +58,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
 
+      if (event.password.length < 6) {
+        emit(Loginfailure(
+            message: "Password must be atleast 6 characters long"));
+        return;
+      }
+
       final auth = FirebaseAuth.instance;
-      emit(Proccess());
+      emit(Proccess(logged: true));
 
       try {
-        await auth.signInWithEmailAndPassword(
-            email: event.email, password: event.password);
-
-        UserModel user =
-            UserModel(name: "name", email: event.email, pic: event.password);
-        emit(LoginSuccess(model: user));
+        await auth
+            .signInWithEmailAndPassword(
+                email: event.email, password: event.password)
+            .then((value) {
+          UserModel user =
+              UserModel(name: "name", email: event.email, pic: event.password);
+          emit(LoginSuccess(model: user));
+          emit(Proccess(logged: false));
+        });
       } on FirebaseAuthException catch (e) {
         emit(Loginfailure(message: e.toString()));
       }

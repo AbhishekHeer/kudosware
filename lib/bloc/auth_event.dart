@@ -14,6 +14,8 @@ final class LoginReq extends AuthEvent {
   LoginReq({required this.email, required this.password});
 }
 
+final class Process extends AuthEvent {}
+
 final class Calander extends AuthEvent {
   final String date;
   Calander({required this.date});
