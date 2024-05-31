@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kudosware/bloc/auth_bloc.dart';
 import 'package:kudosware/home/home.dart';
+import 'package:kudosware/messege.dart';
 
 class LoginBody extends StatefulWidget {
   const LoginBody({super.key});
@@ -19,10 +20,24 @@ class _LoginBodyState extends State<LoginBody> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final auth = BlocProvider.of<AuthBloc>(context);
+    final bloc = BlocProvider.of<AuthBloc>(context);
 
-    return BlocBuilder<AuthBloc, AuthState>(
-      bloc: AuthBloc(),
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is LoginSuccess) {
+          Messege.showMessege(context, "Welcome");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+          email.text = "";
+          password.text = "";
+        }
+
+        if (state is Loginfailure) {
+          Messege.showMessege(context, "Invalid Credentials");
+        }
+      },
       builder: (context, state) {
         return SingleChildScrollView(
           child: Center(
@@ -75,10 +90,11 @@ class _LoginBodyState extends State<LoginBody> {
                 SizedBox(height: height * .05),
                 ElevatedButton(
                   onPressed: () async {
-                    // BlocProvider.of<AuthBloc>(context).add(LoginEvent(email.text, password.text));
-                    auth.add(AuthReq(
-                        email: email.text.toString(),
-                        password: password.text.toString()));
+                    bloc.add(
+                      LoginReq(
+                          email: email.text.toString(),
+                          password: password.text.toString()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(width * .3, height * .05),

@@ -1,5 +1,21 @@
 {
     "editor.codeActionsOnSave": {
         "source.fixAll": "always"
+    },
+    "background.fullscreen": {
+
+        "images": [
+            "https://i.pinimg.com/564x/57/43/8e/57438e8ca06f2da881aa017a6f25403a.jpg"
+        ],
+        "opacity": 0.91,
+        "size": "cover",
+        "position": "center",
+        "interval": 0
+    },
+    "background.style": {
+
+        "background-position": "100% 100%",
+        "background-size": "auto",
+        "opacity": 1
     }
 }

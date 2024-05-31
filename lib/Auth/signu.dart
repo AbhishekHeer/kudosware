@@ -103,6 +103,9 @@ class _SignState extends State<Sign> {
             context,
             MaterialPageRoute(builder: (context) => const HomeScreen()),
           );
+
+          email.text = "";
+          password.text = "";
         }
         if (state is Authfailure) {
           Messege.showMessege(context, state.message);
