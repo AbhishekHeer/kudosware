@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kudosware/Auth/backend.dart';
 import 'package:kudosware/Auth/login..dart';
 import 'package:kudosware/bloc/auth_bloc.dart';
 import 'package:kudosware/home/adddetaills.dart';
@@ -27,11 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              Auth.logout().then((value) => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const LoginScreen())));
-              // Perform logout logic here
+              FirebaseAuth.instance.signOut().then((value) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ));
+              });
             },
             icon: const Icon(Icons.exit_to_app_outlined),
           ),

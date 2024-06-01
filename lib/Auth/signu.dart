@@ -29,12 +29,6 @@ class _SignState extends State<Sign> {
     return SingleChildScrollView(
         child: BlocConsumer<AuthBloc, AuthState>(
       builder: (context, state) {
-        if (state is AuthLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
         return Column(children: [
           Column(
             children: <Widget>[

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kudosware/Auth/login..dart';
 import 'package:kudosware/bloc/auth_bloc.dart';
 import 'package:kudosware/home/home.dart';
 import 'package:kudosware/messege.dart';
@@ -24,30 +25,18 @@ class _LoginBodyState extends State<LoginBody> {
 
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is LoginSuccess) {
-          Messege.showMessege(context, "Welcome");
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
-          email.text = "";
-          password.text = "";
-        }
-
         if (state is Loginfailure) {
-          Messege.showMessege(context, "Invalid Credentials");
+          Messege.showMessege(context, state.message);
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+          return;
         }
 
         if (state is Proccess) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
-        }
-      },
-      builder: (context, state) {
-        if (state is Proccess) {
-          if (state.logged != true) {
+          if (state.logged == true) {
             showAdaptiveDialog(
                 context: context,
                 builder: (context) {
@@ -56,13 +45,19 @@ class _LoginBodyState extends State<LoginBody> {
                     child: CircularProgressIndicator(),
                   ));
                 });
-          } else {
-            Navigator.pushReplacement(
+          }
+
+          if (state.logged == false) {
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
+            email.text = "";
+            password.text = "";
           }
         }
+      },
+      builder: (context, state) {
         return SingleChildScrollView(
           child: Center(
             child: Column(

@@ -26,7 +26,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
 
-      emit(AuthLoading());
       try {
         final auth = FirebaseAuth.instance;
         final store = FirebaseFirestore.instance;
@@ -37,8 +36,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         UserModel user =
             UserModel(name: "name", email: event.email, pic: event.password);
         String id = DateTime.now().microsecondsSinceEpoch.toString();
-        await store.collection("user").doc(id).set(user.toJson());
-        emit(Authsuccess(model: user));
+        await store.collection("user").doc(id).set(user.toJson()).then((value) {
+          emit(Authsuccess(model: user));
+        }).whenComplete(() {
+          emit(Authsuccess(model: user));
+        });
       } on FirebaseAuthException catch (e) {
         emit(Authfailure(message: "Email already used by another account"));
         throw Exception(e);
@@ -65,20 +67,46 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
 
       final auth = FirebaseAuth.instance;
-      emit(Proccess(logged: true));
 
       try {
+        emit(Proccess(logged: true));
         await auth
             .signInWithEmailAndPassword(
                 email: event.email, password: event.password)
-            .then((value) {
-          UserModel user =
+            .then((value) async {
+          final user =
               UserModel(name: "name", email: event.email, pic: event.password);
-          emit(LoginSuccess(model: user));
+          final store = FirebaseFirestore.instance;
+          String id = DateTime.now().microsecondsSinceEpoch.toString();
+          await store.collection("user").doc(id).set(user.toJson());
+
+          emit(LoginSuccess());
+        }).whenComplete(() {
           emit(Proccess(logged: false));
+          emit(LoginSuccess());
+        }).onError((error, stackTrace) {
+          emit(Loginfailure(message: error.toString()));
         });
       } on FirebaseAuthException catch (e) {
         emit(Loginfailure(message: e.toString()));
+
+        if (e.message ==
+            "The password is invalid or the user does not have a password."
+                "[ Password should be atleast 6 characters long ]") {
+          emit(Loginfailure(
+              message: "Password should be atleast 6 characters long"));
+        } else if (e.message ==
+            "There is no user record corresponding to this identifier. The user may have been deleted."
+                "[ Please check your email and password ]") {
+          emit(Loginfailure(message: "Please check your email and password"));
+        } else if (e.message ==
+            "The email address is badly formatted."
+                "[ Please check your email and password ]") {
+          emit(Loginfailure(message: "Please check your email and password"));
+        } else {
+          emit(Loginfailure(message: e.toString()));
+        }
+        return;
       }
     });
 

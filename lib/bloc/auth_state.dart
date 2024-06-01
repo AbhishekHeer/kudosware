@@ -15,8 +15,6 @@ final class Authfailure extends AuthState {
   Authfailure({required this.message});
 }
 
-final class AuthLoading extends AuthState {}
-
 final class Loginrequest extends AuthState {}
 
 final class Loginfailure extends AuthState {
@@ -25,11 +23,7 @@ final class Loginfailure extends AuthState {
   Loginfailure({required this.message});
 }
 
-final class LoginSuccess extends AuthState {
-  final UserModel model;
-
-  LoginSuccess({required this.model});
-}
+final class LoginSuccess extends AuthState {}
 
 final class Picked extends AuthState {
   final String pickeddate;

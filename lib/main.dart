@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kudosware/Auth/login..dart';
+import 'package:kudosware/Auth/verifyemial.dart';
 import 'package:kudosware/Routes/gen_routes.dart';
 import 'package:kudosware/bloc/auth_bloc.dart';
 import 'package:kudosware/bloc/navigate_bloc.dart';
@@ -39,7 +40,9 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: RoutesGen().generateRoute,
         home: FirebaseAuth.instance.currentUser == null
             ? const LoginScreen()
-            : const HomeScreen(),
+            : FirebaseAuth.instance.currentUser?.emailVerified == true
+                ? const HomeScreen()
+                : const Verifyemail(),
       ),
     );
   }
